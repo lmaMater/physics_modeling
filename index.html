@@ -13,13 +13,13 @@
 <!-- Ввод параметров -->
 <form id="paramsForm">
     <label for="magneticField">Магнитное поле (Тл):            </label>
-    <input type="number" step="0.01" id="magneticField" value="1.0">
+    <input type="number" step="0.01" min="0" id="magneticField" value="1.0">
     <br>
     <label for="rotationFrequency">Частота вращения (Гц):      </label>
-    <input type="number" step="0.01" id="rotationFrequency" value="1.0">
+    <input type="number" step="0.01" min="0" id="rotationFrequency" value="1.0">
     <br>
     <label for="circuitResistance">Сопротивление контура (Ом): </label>
-    <input type="number" step="0.01" id="circuitResistance" value="0.5">
+    <input type="number" step="0.01" min="0.01" id="circuitResistance" value="0.5">
     <br>
     <button type="submit">Обновить (Enter)</button>
 </form>
