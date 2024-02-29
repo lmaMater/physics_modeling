@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моделирование электрогенератора</title>
+    <!-- Подключаем библиотеку Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<h1>Моделирование электрогенератора</h1>
+
+<!-- Форма для ввода параметров -->
+<form id="paramsForm">
+    <label for="magneticField">Магнитное поле:</label>
+    <input type="number" id="magneticField" value="1.0">
+    <br>
+    <label for="rotationFrequency">Частота вращения:</label>
+    <input type="number" id="rotationFrequency" value="1.0">
+    <br>
+    <label for="circuitResistance">Сопротивление контура:</label>
+    <input type="number" id="circuitResistance" value="1.0">
+    <br>
+    <button type="submit">Обновить</button>
+</form>
+
+<!-- Место для графиков -->
+<div id="plots"></div>
+
+<script>
+    // Функция для отправки данных формы и обновления графиков
+    function updatePlots(event) {
+        event.preventDefault();
+
+        // Получаем значения параметров из формы
+        const magneticField = parseFloat(document.getElementById("magneticField").value);
+        const rotationFrequency = parseFloat(document.getElementById("rotationFrequency").value);
+        const circuitResistance = parseFloat(document.getElementById("circuitResistance").value);
+
+        // Создаем графики с новыми параметрами
+        generatePlots(magneticField, rotationFrequency, circuitResistance);
+    }
+
+    // Функция для создания графиков с заданными параметрами
+    function generatePlots(magneticField, rotationFrequency, circuitResistance) {
+        const time = Array.from({length: 1000}, (_, i) => i / 100);  // Временные отсчеты
+
+        // Вычисление ЭДС и индукционного тока в контуре
+        const emf = time.map(t => 2 * Math.PI * rotationFrequency * magneticField * Math.cos(2 * Math.PI * rotationFrequency * t));
+        const current = emf.map(e => e / circuitResistance);
+
+        // Создаем данные для графиков
+        const emfTrace = {
+            x: time,
+            y: emf,
+            mode: 'lines',
+            name: 'ЭДС'
+        };
+
+        const currentTrace = {
+            x: time,
+            y: current,
+            mode: 'lines',
+            name: 'Ток'
+        };
+
+        const layout = {
+            title: 'Графики зависимости ЭДС и индукционного тока от времени',
+            xaxis: {
+                title: 'Время'
+            },
+            yaxis: {
+                title: 'Значение'
+            }
+        };
+
+        // Отображаем графики
+        Plotly.newPlot('plots', [emfTrace, currentTrace], layout);
+    }
+
+    // Добавляем обработчик события отправки формы
+    document.getElementById("paramsForm").addEventListener("submit", updatePlots);
+
+    // Создаем графики с начальными параметрами
+    generatePlots(1.0, 1.0, 1.0);
+</script>
+
+</body>
+</html>
