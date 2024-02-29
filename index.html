@@ -5,27 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Электрогенератор</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #202124;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .form-container {
+            width: 30%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        form {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        form input {
+            width: calc(100% - 10px);
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+        }
+        button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #plots-container {
+            width: 70%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #plots {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
 
-<h1>Электрогенератор</h1>
+<div class="container">
+    <!-- Ввод параметров -->
+    <div class="form-container">
+        <h1>Параметры</h1>
+        <form id="paramsForm">
+            <label for="magneticField">Магнитное поле (Тл):</label>
+            <input type="number" step="0.01" min="0" id="magneticField" value="1.0">
+            <br>
+            <label for="rotationFrequency">Частота вращения (Гц):</label>
+            <input type="number" step="0.01" min="0" id="rotationFrequency" value="1.0">
+            <br>
+            <label for="circuitResistance">Сопротивление контура (Ом):</label>
+            <input type="number" step="0.01" min="0.01" id="circuitResistance" value="0.5">
+            <br>
+            <button type="submit">Обновить (Enter)</button>
+        </form>
+    </div>
 
-<!-- Ввод параметров -->
-<form id="paramsForm">
-    <label for="magneticField">Магнитное поле (Тл):            </label>
-    <input type="number" step="0.01" min="0" id="magneticField" value="1.0">
-    <br>
-    <label for="rotationFrequency">Частота вращения (Гц):      </label>
-    <input type="number" step="0.01" min="0" id="rotationFrequency" value="1.0">
-    <br>
-    <label for="circuitResistance">Сопротивление контура (Ом): </label>
-    <input type="number" step="0.01" min="0.01" id="circuitResistance" value="0.5">
-    <br>
-    <button type="submit">Обновить (Enter)</button>
-</form>
-
-<!-- Графики -->
-<div id="plots"></div>
+    <!-- Графики -->
+    <div id="plots-container">
+        <div id="plots"></div>
+    </div>
+</div>
 
 <script>
     function updatePlots(event) {
@@ -50,24 +117,36 @@
             x: time,
             y: emf,
             mode: 'lines',
-            name: 'ЭДС (В)'
+            name: '<span style="color: #fff;">ЭДС (В)</span>'
         };
 
         const currentTrace = {
             x: time,
             y: current,
             mode: 'lines',
-            name: 'Ток (А)'
+            name: '<span style="color: #fff;">Ток (А)</span>'
         };
 
         const layout = {
-            title: 'Графики зависимости ЭДС и индукционного тока от времени',
+            title: '<span style="color: #fff;">Графики</span>',
             xaxis: {
-                title: 'Время (с)'
+                title: '<span style="color: #fff;">Время (с)</span>',
+                color: '#fff',
+                titlefont: {
+                    size: 14,
+                    color: '#fff'
+                }
             },
             yaxis: {
-                title: 'Значение'
-            }
+                title: '<span style="color: #fff;">Значение</span>',
+                color: '#fff',
+                titlefont: {
+                    size: 14,
+                    color: '#fff'
+                }
+            },
+            plot_bgcolor: '#333',
+            paper_bgcolor: '#333'
         };
         
         Plotly.newPlot('plots', [emfTrace, currentTrace], layout);
